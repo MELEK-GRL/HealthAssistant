@@ -1,28 +1,51 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect, useRef } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { AppProvider } from './src/navigation/context/AppContext';
+import AppNavigator from './src/navigation/AppNavigator';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { Dimensions, AppState, AppStateStatus } from 'react-native';
+import useDeviceStore from './src/store/useDeviceStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
+  const setDimensions = useDeviceStore(state => state.setDimensions);
+  const appState = useRef(AppState.currentState);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      const { width, height } = Dimensions.get('window');
+      setDimensions(width, height);
+    };
+
+    const dimensionSub = Dimensions.addEventListener('change', updateDimensions);
+    updateDimensions();
+
+    return () => dimensionSub.remove();
+  }, []);
+
+  useEffect(() => {
+    const handleAppStateChange = async (nextState: AppStateStatus) => {
+      if (
+        appState.current.match(/active|inactive/) &&
+        nextState === 'background'
+      ) {
+        console.log('📴 Uygulama kapatıldı, oturum siliniyor...');
+        await AsyncStorage.multiRemove(['token', 'user']);
+      }
+      appState.current = nextState;
+    };
+
+    const stateSub = AppState.addEventListener('change', handleAppStateChange);
+    return () => stateSub.remove();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
+    <AppProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </AppProvider>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+};
 
 export default App;

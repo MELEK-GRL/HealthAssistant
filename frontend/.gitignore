@@ -1,0 +1,13 @@
+# Env dosyaları
+.env
+.env.local
+.env.development
+.env.production
+
+# Node modülleri
+node_modules/
+
+# iOS / Android build dosyaları
+ios/Pods
+android/.gradle
+android/app/build

@@ -1,0 +1,1 @@
+/Users/melek/Desktop/HealthAssistant/frontend/android/app/build/intermediates/cxx/Debug/6t3x3g1o/obj/x86_64

@@ -1,0 +1,15 @@
+# Env dosyaları
+.env
+.env.local
+.env.development
+.env.production
+
+# Node modülleri
+node_modules/
+
+# Log dosyaları
+npm-debug.log
+yarn-error.log
+
+# Sistem dosyaları
+.DS_Store
