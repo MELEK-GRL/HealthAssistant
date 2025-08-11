@@ -20,7 +20,6 @@ const Login = ({ navigation }: any) => {
   const [password, setPassword] = useState('');
   const { w1px, h1px, fs1px } = useResponsive();
   const setUser = useUserStore(state => state.setUser);
-
   const handleLogin = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
