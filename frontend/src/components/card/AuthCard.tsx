@@ -31,7 +31,7 @@ interface Props {
     thirdPlaceholderTextColor?: string;
     thirdValue?: string;
     thirdOnChangeText?: (val: string) => void;
-
+    secondSecureTextEntry?: boolean;
     onLoginPress?: () => void;
     onRegisterPress?: () => void;
 }
@@ -57,6 +57,7 @@ const AuthCard: React.FC<Props> = ({
     thirdPlaceholder,
     thirdValue,
     thirdPlaceholderTextColor = '#999',
+    secondSecureTextEntry,
 }) => {
     const { w1px, h1px, fs1px } = useResponsive();
 
@@ -159,7 +160,7 @@ const AuthCard: React.FC<Props> = ({
                             value={secondValue}
                             onChangeText={secondOnChangeText}
                             style={styles.input}
-                            secureTextEntry
+                            secureTextEntry={secondSecureTextEntry ?? true}
                         />
                     </View>
                 }

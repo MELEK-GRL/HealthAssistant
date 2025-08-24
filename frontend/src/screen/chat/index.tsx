@@ -7,20 +7,16 @@ import {
   KeyboardAvoidingView,
   Platform,
   ListRenderItemInfo,
-  TouchableOpacity,
 } from 'react-native';
 import uuid from 'react-native-uuid';
 import { useRoute } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
-
 import TextInputComponent from '../../components/Input/TextInputComponent';
 import { checkIfHealthRelated } from '../../utils/checkIfHealthRelated';
 import { API_BASE_URL } from '@env';
 import { useResponsive } from '../../utils/responsive';
-import Icon from 'react-native-vector-icons/Ionicons';
 import LoadingAI from '../splash/LoadingAI';
 import colors from '../../theme/colors';
-import LinearGradient from 'react-native-linear-gradient';
 import { useUserStore } from '../../store/userStore';
 import TopBar from '../../components/TopBar/TopBar';
 
@@ -48,6 +44,7 @@ const Chat: React.FC = () => {
   const { w1px, h1px, fs1px } = useResponsive();
   const { user } = useUserStore();
   const flatListRef = useRef<FlatList>(null);
+
   useEffect(() => {
     const fetchConversationMessages = async () => {
       if (!conversationId) return;
@@ -83,9 +80,19 @@ const Chat: React.FC = () => {
       setCurrentConversationId(null);
     }
   }, [conversationId, user]);
+
   const scrollToBottom = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
+    requestAnimationFrame(() => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    });
   };
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
+  }, [messages]);
+
   const sendMessage = async () => {
     setIsLoading(true);
 
@@ -103,6 +110,7 @@ const Chat: React.FC = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     scrollToBottom();
+
     if (hasText) {
       const isRelevant = await checkIfHealthRelated(inputText.trim());
       if (!isRelevant) {
@@ -189,39 +197,8 @@ const Chat: React.FC = () => {
       keyboardVerticalOffset={90}
     >
       <View >
-
-        {/* <TopBar>
-          <TouchableOpacity
-            style={styles.headerNewChatButton}
-            onPress={() => {
-              if (user?.name) {
-                const welcomeMessage: Message = {
-                  id: uuid.v4().toString(),
-                  text: `👨‍⚕️ Merhaba ${user.name}! Ben yapay zekâ destekli sağlık asistanınızım. Size nasıl yardımcı olabilirim?`,
-                  sender: 'ai',
-                };
-                setMessages([welcomeMessage]);
-                setCurrentConversationId(null);
-              }
-            }}
-          >
-            <View style={styles.newChatContent}>
-              <Icon name="chatbubble-ellipses-outline" size={20} color={colors.textWhite} style={{ marginRight: 6 }} />
-              <Text style={styles.headerNewChatText}>Yeni Sohbet</Text>
-            </View>
-          </TouchableOpacity>
-
-          <View style={styles.header}>
-            <Icon name="person-circle-outline" size={24 * fs1px} color={colors.textWhite} style={{ marginRight: 6 * w1px }} />
-            <Text style={styles.headerText}>{user?.name}</Text>
-          </View>
-        </TopBar> */}
         <TopBar
-        // user={user}
-        // setMessages={setMessages}
-        // setCurrentConversationId={setCurrentConversationId}
         />
-
       </View>
 
       <View style={styles.listContainer}>
@@ -229,12 +206,15 @@ const Chat: React.FC = () => {
           <LoadingAI />
         ) : (
           <FlatList
+            ref={flatListRef}
             data={messages}
             keyExtractor={item => item.id}
             style={styles.messagesList}
             contentContainerStyle={{ paddingBottom: 20 }}
             renderItem={renderMessage}
             showsVerticalScrollIndicator={false}
+            onContentSizeChange={scrollToBottom}
+            onLayout={scrollToBottom}
           />
         )}
       </View>

@@ -99,6 +99,7 @@ const Register = () => {
             onLoginPress={handleRegister}
             onRegisterPress={() => navigation.navigate('Login' as never)}
             text={'Giriş Yap'}
+            secondSecureTextEntry={false}
           />
         </ScrollView>
       </KeyboardAvoidingView>

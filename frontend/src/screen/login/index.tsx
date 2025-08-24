@@ -132,6 +132,7 @@ const Login = ({ navigation }: any) => {
                 onLoginPress={handleLogin}
                 onRegisterPress={() => navigation.navigate('Register')}
                 text={'Kayıt Ol'}
+                secondSecureTextEntry={true}
               />
             </ScrollView>
           </View>
