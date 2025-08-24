@@ -112,6 +112,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				02AC5CDC2E5B5B250032B3E1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -199,6 +200,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HealthApp/Pods-HealthApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		02AC5CDC2E5B5B250032B3E1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" = \"Debug\" ]; then\n  # Metro port\n  : ${RCT_METRO_PORT:=8081}\n\n  # Metro zaten açık mı?\n  if lsof -iTCP:$RCT_METRO_PORT -sTCP:LISTEN -t >/dev/null ; then\n    echo \"Metro already running on $RCT_METRO_PORT.\"\n  else\n    echo \"Starting Metro bundler on port $RCT_METRO_PORT...\"\n\n    # Xcode ortam değişkeni: ios klasöründesin; proje kökü bir üst dizin\n    PROJECT_ROOT=\"$SRCROOT/..\"\n\n    # Sadece AppleScript ile Terminal’de tek pencerede çalıştır\n    /usr/bin/osascript <<EOF\ntell application \"Terminal\"\n  if not (exists window 1) then reopen\n  activate\n  do script \"cd \\\"$PROJECT_ROOT\\\" && yarn start\" in front window\nend tell\nEOF\n\n    # Eğer package.json'da \"start\" yoksa, şunu kullan:\n    # do script \"cd \\\"$PROJECT_ROOT\\\" && npx react-native start --reset-cache\" in front window\n  fi\nfi\n";
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

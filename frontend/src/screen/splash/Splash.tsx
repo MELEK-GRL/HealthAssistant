@@ -8,9 +8,11 @@ import { useResponsive } from '../../utils/responsive';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../theme/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
 const Splash = ({ navigation }: Props) => {
+
   const { w1px, h1px, fs1px } = useResponsive();
   const styles = StyleSheet.create({
     container: {

@@ -30,7 +30,7 @@ const LoadingAI = () => {
   return (
     <View style={styles.container}>
       <LottieView
-        source={require('../../assets/loadingAIGif/AIbot2.json')}
+        source={require('../../assets/loadingAIGif/AIbot.json')}
         autoPlay
         loop
         style={styles.animation}

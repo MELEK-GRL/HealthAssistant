@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -75,7 +76,8 @@ const Register = () => {
 
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#f5f6ff' }}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0} style={{ flex: 1, backgroundColor: '#f5f6ff' }}>
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
